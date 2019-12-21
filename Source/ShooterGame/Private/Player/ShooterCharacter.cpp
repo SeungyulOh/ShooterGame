@@ -70,6 +70,8 @@ void AShooterCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
+	ENetMode mode = GetWorld()->GetNetMode();
+
 	if (Role == ROLE_Authority)
 	{
 		Health = GetMaxHealth();

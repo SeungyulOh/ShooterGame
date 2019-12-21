@@ -102,6 +102,7 @@ class AShooterWeapon : public AActor
 	{
 		EBullet,
 		ERocket,
+		EGrenade,
 		EMax,
 	};
 
