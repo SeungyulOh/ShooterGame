@@ -59,6 +59,7 @@ protected:
 	/** projectile data */
 	struct FStickyGrenadeWeaponData WeaponConfig;
 
+	/** grenade state, replicated variable */
 	UPROPERTY(Transient, ReplicatedUsing = OnRep_StateChanged)
 	EGrenadeState State = EGrenadeState::Spawned;
 

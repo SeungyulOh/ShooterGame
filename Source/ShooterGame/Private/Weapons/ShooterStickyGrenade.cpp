@@ -103,6 +103,8 @@ void AShooterStickyGrenade::Server_StopMove(const FHitResult& HitResult)
 		CurrentWorld->GetTimerManager().SetTimer(TimerHandle, Callback_Timer, WeaponConfig.TimeDelay, false);
 	}
 	
+	//In case of running as ListenServer or Standalone,
+	//Client_StopMove should be executed necessarily.
 	if (IsNetMode(NM_ListenServer) || IsNetMode(NM_Standalone))
 	{
 		Client_StopMove();
@@ -120,9 +122,10 @@ void AShooterStickyGrenade::Server_Explode(const FHitResult& Impact)
 	}
 
 	State = EGrenadeState::Explosion;
-
 	SetLifeSpan(2.0f);
 
+	//In case of running as ListenServer or Standalone,
+	//Client_Explode should be executed necessarily.
 	if (IsNetMode(NM_ListenServer) || IsNetMode(NM_Standalone))
 	{
 		Client_Explode();
@@ -189,7 +192,10 @@ void AShooterStickyGrenade::Client_Explode()
 
 	if (WeaponConfig.ExplosionDamage > 0 && WeaponConfig.ExplosionRadius > 0 && WeaponConfig.DamageType)
 	{
-		UGameplayStatics::ApplyRadialDamage(this, WeaponConfig.ExplosionDamage, NudgedImpactLocation, WeaponConfig.ExplosionRadius, WeaponConfig.DamageType, TArray<AActor*>(), this, MyController.Get());
+		if (IsNetMode(NM_Client))
+		{
+			UGameplayStatics::ApplyRadialDamage(this, WeaponConfig.ExplosionDamage, NudgedImpactLocation, WeaponConfig.ExplosionRadius, WeaponConfig.DamageType, TArray<AActor*>(), this, MyController.Get());
+		}
 	}
 
 	if (ExplosionTemplate)
